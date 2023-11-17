@@ -303,6 +303,179 @@ uint8_t zamianaBitowParzystychINieparzystych(uint8_t a) {
     return wynik;
 }
 
+//17.11.2023
+
+void petla1(uint32_t n) {
+
+    uint32_t y = 0;
+    uint32_t y1 = 0;
+
+    for (int i = 0; i != n; i++)y += i;
+
+    _asm {
+        MOV eax, 0
+        start_for:
+            CMP eax, n
+            JZ koniec_for
+            ADD y1, eax
+            ADD eax, 1
+            JMP start_for
+        koniec_for:
+
+    }
+
+    (y == y1) ? printf_s("test passed with %d\n",y) : printf_s("test not passed\n");
+
+}
+void petla2(uint32_t n) {
+
+    uint32_t y = 0, y1 = 0;
+    while (y != n)y += 1;
+
+    _asm {
+        mov eax,y1
+        start_while:
+            cmp eax,n
+            jz koniec_while
+            add eax,1
+            jmp start_while
+        koniec_while:
+            mov y1, eax
+    }
+    (y == y1) ? printf_s("test while passed %d", y) : printf_s("test while failed");
+}
+void petla3(uint32_t n) {
+
+    uint32_t y = 0, y1 = 0;
+    do { y += 1; } while (y != 5);
+
+    _asm {
+        mov eax, y1
+        start:
+        add eax,1
+        cmp eax, 5
+        jnz start
+        mov y1,eax
+
+    }
+    (y == y1) ? printf_s("test dowhile passed %d\n", y) : printf_s("test dowhile failed\n");
+}
+
+uint8_t onesCntC(uint8_t a){
+    uint8_t cnt = 0;
+    if (a & 0x01)cnt++;
+    a >>= 1;
+    if (a & 0x01)cnt++;
+    a >>= 1;
+    if (a & 0x01)cnt++;
+    a >>= 1;
+    if (a & 0x01)cnt++;
+    a >>= 1;
+    if (a & 0x01)cnt++;
+    a >>= 1;
+    if (a & 0x01)cnt++;
+    a >>= 1;
+    if (a & 0x01)cnt++;
+    a >>= 1;
+    if (a & 0x01)cnt++;
+    a >>= 1;
+    return cnt;
+}
+uint8_t onesCntASM(uint8_t a) {
+    uint8_t cnt = 0;
+    _asm {
+        MOV al, a
+        AND al, 0x01
+        ADD cnt, al
+        SHR a,1
+        MOV al, a
+        AND al, 0x01
+        ADD cnt, al
+        SHR a, 1
+        MOV al, a
+        AND al, 0x01
+        ADD cnt, al
+        SHR a, 1
+        MOV al, a
+        AND al, 0x01
+        ADD cnt, al
+        SHR a, 1
+        MOV al, a
+        AND al, 0x01
+        ADD cnt, al
+        SHR a, 1
+        MOV al, a
+        AND al, 0x01
+        ADD cnt, al
+        SHR a, 1
+        MOV al, a
+        AND al, 0x01
+        ADD cnt, al
+        SHR a, 1
+        MOV al, a
+        AND al, 0x01
+        ADD cnt, al
+        SHR a, 1
+
+
+
+    }
+    return cnt;
+}
+uint8_t onesCntCLoop(uint8_t a) {
+    uint8_t cnt = 0;
+    for (int i = 0; i < 8; i++) {
+        if (a & 0x01)cnt++;
+        a >>= 1;
+    }
+    return cnt;
+}
+uint8_t onesCntASMLoop(uint8_t a) {
+    uint8_t cnt = 0;
+    _asm {
+        MOV al,0
+        
+    start_for:
+        CMP al, 8 
+        JZ koniec_for
+        MOV al, a
+        AND al, 0x01
+        ADD cnt, al
+        SHR a, 1
+        JNZ start_for
+    koniec_for:
+
+    }
+    return cnt;
+}
+
+bool onesParity(uint8_t a) {
+    uint8_t cnt = 0;
+    
+    
+    
+    _asm {
+        MOV al, 0
+
+        start_for:
+            CMP al, 8
+            JZ koniec_for
+            MOV al, a
+            AND al, 0x01
+            ADD cnt, al
+            SHR a, 1
+            JNZ start_for
+        koniec_for :
+
+            AND cnt, 0x01
+            //dokonczyc
+
+    }
+    return cnt;
+
+}
+
+
 int main()
 {
 
@@ -346,6 +519,23 @@ int main()
 
     /*uint8_t a = 0xAA;
     a = zamianaBitowParzystychINieparzystych(a);*/
+
+
+//17.11.2023
+
+    //petla1(5);
+    //petla2(5);
+    //petla3(5);
+
+    /*
+    for (int i = 0; i < 256; i++) {
+        uint8_t tmp = (uint8_t)i;
+        printf_s("%d: %d %d %d %d\n",i, onesCntC(tmp), onesCntASM(tmp), onesCntCLoop(tmp), onesCntASMLoop(tmp));
+    }
+    */
+
+
+
 
 
 }
